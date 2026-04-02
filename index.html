@@ -395,23 +395,43 @@
 
 /* Tela de Game Over */
 /* Força a tela de Game Over a aparecer sobre TUDO */
+/* Localize e substitua no seu CSS */
 #game-over-screen {
     position: fixed !important;
-    top: 0 !important; left: 0 !important;
-    width: 100vw !important; height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
     background: black !important;
     display: none; /* O JS mudará para flex */
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Centraliza vertical */
+    align-items: center;     /* Centraliza horizontal */
     z-index: 999999999 !important;
+    color: white;
+    font-family: 'Share Tech Mono', monospace;
 }
 
 #soul-anchor {
     position: relative;
-    width: 20px; height: 20px;
-    display: flex; justify-content: center; align-items: center;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px; /* Espaço para o texto não colar */
 }
+
+.go-text {
+    font-size: 3rem;
+    letter-spacing: 8px;
+    opacity: 0;
+    transition: opacity 2s ease-in;
+    text-shadow: 0 0 10px #fff;
+    text-align: center;
+}
+
+
 
 .soul-shatter-piece {
     position: absolute;
@@ -513,6 +533,69 @@
     text-shadow: 0 0 5px #ff0000;
 }
 
+.chromatic-aberration {
+    text-shadow: 2px 0 0 rgba(255,0,0,0.5), -2px 0 0 rgba(0,255,255,0.5);
+    animation: pulse-bloom 2s infinite alternate;
+}
+
+@keyframes pulse-bloom {
+    from { filter: brightness(1) contrast(1); }
+    to { filter: brightness(1.3) contrast(1.2); text-shadow: 4px 0 0 rgba(255,0,0,0.7), -4px 0 0 rgba(0,255,255,0.7); }
+}
+
+#retry-btn {
+    margin-top: 40px;
+    background: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 15px 40px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.5rem;
+    cursor: pointer;
+    letter-spacing: 3px;
+    transition: 0.3s;
+    opacity: 0; /* O JS vai mudar para 1 */
+    pointer-events: none; /* Só clica quando estiver visível */
+    text-transform: uppercase;
+}
+
+#retry-btn:hover {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 20px #fff;
+    transform: scale(1.1);
+}
+
+/* Localize a área de botões no seu CSS ou adicione no final do <style> */
+.adj-btn-v39 {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #444;
+    color: #fff;
+    width: 28px;  /* Tamanho maior */
+    height: 28px; /* Tamanho maior */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-family: var(--font-terminal);
+    font-size: 1.2rem;
+    transition: 0.2s;
+    user-select: none;
+    border-radius: 2px;
+}
+
+.adj-btn-v39:hover {
+    border-color: var(--color-active);
+    color: var(--color-active);
+    box-shadow: 0 0 10px var(--color-active);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.adj-btn-v39:active {
+    transform: scale(0.9);
+    background: var(--color-active);
+    color: #000;
+}
 
 
     </style>
@@ -520,9 +603,9 @@
 <body>
 
     <div id="game-over-screen">
-    <div id="soul-anchor" style="position: relative;"></div>
+    <div id="soul-anchor"></div>
     <div class="go-text" id="go-text">FIQUE DETERMINADO...</div>
-    <button class="btn-sheet" style="margin-top:30px; opacity:0; transition:2s;" id="retry-btn" onclick="location.reload()">TENTAR NOVAMENTE</button>
+    <button id="retry-btn" onclick="location.reload()" ...>TENTAR NOVAMENTE</button>
 </div>
 
     <div class="tv-static"></div>
@@ -591,7 +674,7 @@
         <div class="receptacle-grid">
     <!-- DETERMINAÇÃO -->
     <div class="receptacle-grid">
-    <div class="soul-box active" style="--i:1" onclick="selectSoul('determinacao', '#ff0000', this)">
+    <div class="soul-box active" style="--i:1" onclick="selectSoul('determinação', '#ff0000', this)">
         <img class="soul-img-display" src="./determinação.png">
         <div class="heart-soul">❤</div>
     </div>
@@ -622,13 +705,13 @@
 
     <script>
         const SOUL_CONFIG = {
-            'determinacao': { color: '#ff0000', desc: 'A VONTADE DE SEGUIR EM FRENTE.\nNADA PODE PARAR SEU CAMINHO.', mock: 'AQUI ELA NÃO VALE DE NADA.', hp: 20, items: [{n:'Torta Toriel', h:20}, {n:'Doce Monstro', h:10}, {n:'Batata Frita', h:15}, {n:'Cachorro-Quente', h:20}, {n:'Donut Aranha', h:12}], skills: '<li>- Persistir</li><li>- Recusar</li>' },
+            'determinação': { color: '#ff0000', desc: 'A VONTADE DE SEGUIR EM FRENTE.\nNADA PODE PARAR SEU CAMINHO.', mock: 'AQUI ELA NÃO VALE DE NADA.', hp: 20, items: [{n:'Torta Toriel', h:20}, {n:'Doce Monstro', h:10}, {n:'Batata Frita', h:15}, {n:'Cachorro-Quente', h:20}, {n:'Donut Aranha', h:12}], skills: '<li>- Persistir</li><li>- Recusar</li>' },
             'coragem': { color: '#ffa500', desc: 'O DESTEMOR DIANTE DO PERIGO.\nVOCÊ É O PRIMEIRO A ENTRAR.', mock: 'O ABISMO NÃO SE IMPORTA COM O SEU GRITO.', hp: 35, items: [{n:'Luvas Robustas', h:10}, {n:'Bife Rosto', h:25}, {n:'Lanche Herói', h:15}, {n:'Chá Batalha', h:10}, {n:'Maçã Gelada', h:15}], skills: '<li>- Investida</li><li>- Rugido</li>' },
             'gentileza': { color: '#ffff00', desc: 'O CUIDADO COM O PRÓXIMO.\nSUA LUZ CURA AS FERIDAS.', mock: 'O MUNDO VAI DEVORAR VOCÊ COM UM SORRISO.', hp: 25, items: [{n:'Salada Flores', h:25}, {n:'Frigideira', h:10}, {n:'Sopa Almas', h:20}, {n:'Pão Caseiro', h:15}, {n:'Suco Luz', h:10}], skills: '<li>- Curar</li><li>- Escudo</li>' },
             'empatia': { color: '#ff69b4', desc: 'O ELO QUE UNE AS ALMAS.\nVOCÊ SENTE O PULSO DE TODOS.', mock: 'SENTIR A DOR DOS OUTROS SÓ VAI TE MATAR MAIS RÁPIDO.', hp: 18, items: [{n:'Chá Sorriso', h:15}, {n:'Laço Rosa', h:8}, {n:'Doce Sonho', h:20}, {n:'Biscoito Coração', h:10}, {n:'Água Pura', h:15}], skills: '<li>- Conectar</li><li>- Sentir</li>' }
         };
 
-        let currentKey = 'determinacao';
+        let currentKey = 'determinação';
         let typeTimer;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -778,35 +861,6 @@ if (hpVal <= maxVal * 0.2) {
             document.getElementById('sheet-exp').innerText = exp; sfx(1000, 'sine', 0.05, 0.02);
         }
 
-        window.takeDamage = function() {
-    // 1. Pega os elementos de HP
-    let c = document.getElementById('curr-hp');
-    let m = document.getElementById('max-hp');
-    if (!c || !m) return; // Segurança caso o elemento não exista
-
-    let currentHP = parseInt(c.innerText);
-    
-    if (currentHP > 0) {
-        // Reduz o HP
-        currentHP -= 5; // Aumentei o dano para testar mais rápido
-        if (currentHP < 0) currentHP = 0;
-        
-        c.innerText = currentHP;
-        if(window.updateHP) updateHP();
-        
-        // Efeito visual de dano (Flash Vermelho)
-        document.body.style.backgroundColor = "#500";
-        setTimeout(() => document.body.style.backgroundColor = "#000", 50);
-        
-        if (window.sfx) sfx(150, 'sawtooth', 0.1, 0.1);
-
-        // 2. DISPARA O GAME OVER SE CHEGAR A ZERO
-        if (currentHP <= 0) {
-            console.log("Iniciando Game Over..."); // Debug no console
-            triggerGameOver();
-        }
-    }
-};
 
 function triggerGameOver() {
     const goScreen = document.getElementById('game-over-screen');
@@ -916,7 +970,7 @@ window.onload = () => {
     
     // Inicia na determinação
     const firstBox = document.querySelector('.soul-box');
-    if (firstBox) selectSoul('determinacao', '#ff0000', firstBox);
+    if (firstBox) selectSoul('determinação', '#ff0000', firstBox);
 };
 
 // Função para criar uma partícula
@@ -953,39 +1007,6 @@ setInterval(() => {
 // Exemplo de uso no seu initTransition:
 typeWriter(`<span class="shaking-text">${SOUL_CONFIG[currentKey].mock}</span>`, 'mock-desc');
 
-// Forçamos a função de dano a verificar a morte
-window.takeDamage = function() {
-    const currEl = document.getElementById('curr-hp');
-    if (!currEl) return;
-
-    let currentHP = parseInt(currEl.innerText);
-    
-    if (currentHP > 0) {
-        currentHP -= 5; // Dano maior para teste
-        if (currentHP < 0) currentHP = 0;
-        currEl.innerText = currentHP;
-        
-        // Atualiza a barra visual
-        if (typeof updateHP === 'function') updateHP();
-        
-        // Efeito de tremer a tela ao levar dano
-        document.body.classList.add('shake');
-        setTimeout(() => document.body.classList.remove('shake'), 200);
-        
-        if (window.sfx) sfx(150, 'sawtooth', 0.1, 0.1);
-
-        // DISPARA O GAME OVER
-        if (currentHP <= 0) {
-            console.log("MORTE DETECTADA!");
-            triggerGameOver();
-        }
-    }
-};
-
-function triggerGameOver() {
-    const goScreen = document.getElementById('game-over-screen');
-    const finalOverlay = document.getElementById('final-overlay');
-    const anchor = document.getElementById('soul-anchor');
 
     // 1. ESCONDE TUDO E MOSTRA A TELA PRETA
     if (finalOverlay) finalOverlay.style.display = 'none';
@@ -1023,7 +1044,7 @@ function triggerGameOver() {
             }, 2000);
         }, 1200);
     }, 1500);
-}
+
 
 // MELODIA TRISTE (SÓ SE O USER MORRER)
 function playGameOverTheme() {
@@ -1033,20 +1054,6 @@ function playGameOverTheme() {
     });
 }
 
-// Função que realmente mata o jogador
-window.triggerGameOver = function() {
-    const goScreen = document.getElementById('game-over-screen');
-    const anchor = document.getElementById('soul-anchor');
-    const finalOverlay = document.getElementById('final-overlay');
-
-    if (finalOverlay) finalOverlay.style.display = 'none';
-    if (goScreen) goScreen.style.display = 'flex';
-    
-    // Garante que o anchor esteja no centro
-    anchor.style.position = 'relative';
-    anchor.innerHTML = '<span id="dying-soul" style="color:#fff; font-size:4rem; display:block;">❤</span>';
-    
-    if (window.sfx) sfx(100, 'sawtooth', 0.5, 0.3);
 
     setTimeout(() => {
         const soul = document.getElementById('dying-soul');
@@ -1075,25 +1082,9 @@ window.triggerGameOver = function() {
             }, 2000);
         }, 1000);
     }, 1500);
-};
+
 
 // Substitui a função de Dano original para garantir a checagem
-window.takeDamage = function() {
-    const currHPComp = document.getElementById('curr-hp');
-    if (!currHPComp) return;
-
-    let val = parseInt(currHPComp.innerText);
-    val = Math.max(0, val - 5); // Tira 5 de dano
-    currHPComp.innerText = val;
-
-    if (window.updateHP) window.updateHP();
-    if (window.sfx) sfx(150, 'sawtooth', 0.1, 0.1);
-
-    // Se zerou, chama o Game Over
-    if (val <= 0) {
-        window.triggerGameOver();
-    }
-};
 
 
 
@@ -1124,7 +1115,7 @@ window.takeDamage = function() {
 
 
                 window.onresize = resize; resize(); loop();
-        window.onload = () => { selectSoul('determinacao', '#ff0000', document.querySelector('.soul-box')); };
+        window.onload = () => { selectSoul('determinação', '#ff0000', document.querySelector('.soul-box')); };
     </script>
 </body>
 </html>
@@ -1137,8 +1128,28 @@ window.takeDamage = function() {
     #rpg-sheet { position: relative!important; transform: scale(0.9)!important; border: 1px solid #fff; width: 850px!important; background: #000; margin: 0!important; padding: 25px!important; }
 
     /* 2. LAYOUT LADO A LADO (BARRAS + ARMA) */
-    .stats-flex-v39 { display: flex; justify-content: space-between; align-items: center; padding: 0 45px; margin: 15px 0; gap: 30px; }
-    .bars-stack-v39 { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .stats-flex-v39 { 
+    display: flex; 
+    justify-content: space-around; /* Distribui melhor os espaços */
+    align-items: center; 
+    padding: 10px 20px; /* Reduzi o padding lateral */
+    margin: 10px 0; 
+    gap: 15px; 
+    width: 100%;
+}
+.bars-stack-v39 button {
+    transition: 0.2s;
+    font-family: var(--font-terminal);
+}
+.bars-stack-v39 button:hover {
+    border-color: var(--color-active) !important;
+    color: var(--color-active) !important;
+    background: rgba(255,255,255,0.05);
+}
+.bars-stack-v39 button:active {
+    transform: scale(0.9);
+}
+
     
     /* NOVO: CONTAINER DA ARMA COM DADO */
     .weapon-box-v39 {
@@ -1220,7 +1231,7 @@ window.takeDamage = function() {
 <script>
 (function() {
     const ASSETS = {
-        'determinacao': { w: 'FACA BRINQUEDO', url: 'https://images.tcdn.com.br', m: [{n:'CORTE RUBRO', c:20, d:'Dano Crítico'}, {n:'RECUSAR', c:50, d:'Cura 20 HP'}] },
+        'determinação': { w: 'FACA BRINQUEDO', url: 'https://images.tcdn.com.br', m: [{n:'CORTE RUBRO', c:20, d:'Dano Crítico'}, {n:'RECUSAR', c:50, d:'Cura 20 HP'}] },
         'coragem': { w: 'LUVAS ROBUSTAS', url: 'https://cdn.awsli.com.br', m: [{n:'IMPACTO LARANJA', c:15, d:'Atordoar'}, {n:'INVESTIDA', c:60, d:'Dano Crítico'}] },
         'gentileza': { w: 'FRIGIDEIRA', url: 'https://sc04.alicdn.com', m: [{n:'CURA AMARELA', c:25, d:'Cura 30 HP'}, {n:'ESCUDO', c:20, d:'Defesa 80%'}] },
         'empatia': { w: 'LAÇO ROSA', url: 'https://images.tcdn.com.br', m: [{n:'ELO ROSA', c:15, d:'Sente Alma'}, {n:'ABRAÇO', c:70, d:'Cura Total'}] }
@@ -1230,41 +1241,79 @@ window.takeDamage = function() {
         const hpS = document.querySelector('.hp-section'), foot = document.getElementById('sheet-controls'), inv = document.getElementById('inv-list');
         if (hpS && !document.getElementById('inj-v39')) {
             const wrapper = document.createElement('div'); wrapper.id = 'inj-v39'; wrapper.className = 'stats-flex-v39';
-            const k = typeof currentKey !== 'undefined' ? currentKey : 'determinacao';
-            const data = ASSETS[k] || ASSETS['determinacao'];
+            const k = typeof currentKey !== 'undefined' ? currentKey : 'determinação';
+            const data = ASSETS[k] || ASSETS['determinação'];
             
             // Persistência individual por alma
+            const savedState = JSON.parse(localStorage.getItem(`rpg_save_v39_${k}`)) || { hp: "20", lv: "1", exp: "0", tp: "100", abt: "100" };
             const savedImg = localStorage.getItem(`weapon_img_${k}`) || data.url;
             const savedName = localStorage.getItem(`weapon_name_${k}`) || data.w;
 
             wrapper.innerHTML = `
-                <div class="bars-stack-v39">
-                    <div style="display:flex;align-items:center;gap:12px;font-family:var(--font-terminal)"><span style="color:#0080ff;min-width:35px">TP</span><div style="width:250px;height:18px;background:#111;border:1px solid #333;position:relative"><div id="tp-f39" style="height:100%;width:50%;background:#0080ff;box-shadow:0 0 10px #0080ff;transition:0.3s"></div></div><span style="color:#888"><span id="v-tp39">50</span>/100</span><button onclick="window.adj39('tp',1)" style="background:none;border:1px solid #333;color:#888;cursor:pointer;padding:0 5px">+</button></div>
-<div style="display:flex;align-items:center;gap:12px;font-family:var(--font-terminal)">
-    <span style="color:#00ffcc;min-width:35px">ABT</span>
-    <div style="width:250px;height:18px;background:#111;border:1px solid #333;position:relative">
-        <div id="abt-f39" style="height:100%;width:0%;background:#00ffcc;box-shadow:0 0 10px #00ffcc;transition:0.3s"></div>
-    </div>
-    <span style="color:#888"><span id="v-abt39">0</span>/100</span>
-    
-    <!-- Botões de ajuste: Note o botão de "-" adicionado -->
-    <div style="display:flex; gap:5px;">
-        <button onclick="window.adj39('abt',-1)" style="background:none;border:1px solid #333;color:#888;cursor:pointer;padding:0 8px;font-family:var(--font-terminal)">-</button>
-        <button onclick="window.adj39('abt',1)" style="background:none;border:1px solid #333;color:#888;cursor:pointer;padding:0 8px;font-family:var(--font-terminal)">+</button>
-    </div>
-</div>
 
-                    <div id="log-v39">> SISTEMA ATIVO.</div>
-                </div>
-                <div class="weapon-area-v39">
-                    <div class="dice-btn-v39" onclick="window.rollQuickDice(this)">🎲</div>
-                    <div class="weapon-box-v39" onclick="document.getElementById('weapon-input').click()">
-                        <img id="w-img-v39" src="${savedImg}" class="weapon-img-v39">
-                        <span id="w-txt-v39" class="weapon-txt-v39" contenteditable="true" onblur="window.saveWeaponName(this.innerText)" onclick="event.stopPropagation()">${savedName}</span>
-                        <input type="file" id="weapon-input" style="display:none" accept="image/*" onchange="window.uploadWeapon(this)">
-                    </div>
-                </div>`;
+    <div class="bars-stack-v39">
+        <!-- BARRA TP -->
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span style="color:#0080ff; min-width:30px">TP</span>
+            <div style="width:180px; height:16px; background:#111; border:1px solid #333; position:relative">
+                <div id="tp-f39" style="height:100%; width:${savedState.tp}%; background:#0080ff; box-shadow:0 0 10px #0080ff; transition:0.3s"></div>
+            </div>
+            <span style="color:#888; min-width:65px"><span id="v-tp39">${savedState.tp}</span>/100</span>
+            <!-- Controles de TP -->
+            <div style="display:flex; gap:5px;">
+            <div class="adj-btn-v39" onclick="window.adj39('tp', -1)">-</div>
+            <div class="adj-btn-v39" onclick="window.adj39('tp', 1)">+</div>
+    </div>
+        </div>
+
+        <!-- BARRA ABT -->
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span style="color:#00ffcc; min-width:30px">ABT</span>
+            <div style="width:180px; height:16px; background:#111; border:1px solid #333; position:relative">
+                <div id="abt-f39" style="height:100%; width:${savedState.abt}%; background:#00ffcc; box-shadow:0 0 10px #00ffcc; transition:0.3s"></div>
+            </div>
+            <span style="color:#888; min-width:65px"><span id="v-abt39">${savedState.abt}</span>/100</span>
+            <div style="display:flex; gap:5px">
+                 <div class="adj-btn-v39" onclick="window.adj39('abt', -1)">-</div>
+        <div class="adj-btn-v39" onclick="window.adj39('abt', 1)">+</div>
+    </div>
+        </div>
+    </div>
+
+
+        <div id="log-v39" style="font-size:0.8rem; opacity:0.7">> SISTEMA INICIALIZADO.</div>
+    </div>
+
+    <div class="weapon-area-v39" style="display:flex; align-items:center; gap:15px">
+        <div class="dice-btn-v39" onclick="window.rollQuickDice(this)" title="Rolar Dado Rápido">🎲</div>
+        <div class="weapon-box-v39" onclick="document.getElementById('weapon-input').click()">
+            <img id="w-img-v39" src="${savedImg}" class="weapon-img-v39">
+            <span id="w-txt-v39" class="weapon-txt-v39" contenteditable="true">${savedName}</span>
+            <input type="file" id="weapon-input" style="display:none" accept="image/*" onchange="window.uploadWeapon(this)">
+        </div>
+    </div>`;
+
             hpS.parentNode.insertBefore(wrapper, hpS.nextSibling);
+
+            setTimeout(() => {
+    if(document.getElementById('curr-hp')) document.getElementById('curr-hp').innerText = savedState.hp;
+    if(document.getElementById('sheet-lv')) document.getElementById('sheet-lv').innerText = savedState.lv;
+    if(document.getElementById('sheet-exp')) document.getElementById('sheet-exp').innerText = savedState.exp;
+    // Força o preenchimento visual e numérico ao carregar
+    const tpBar = document.getElementById('tp-f39');
+    const abtBar = document.getElementById('abt-f39');
+    const tpVal = document.getElementById('v-tp39');
+    const abtVal = document.getElementById('v-abt39');
+
+    if(tpBar) tpBar.style.width = "100%";
+    if(abtBar) abtBar.style.width = "100%";
+    if(tpVal) tpVal.innerText = "100";
+    if(abtVal) abtVal.innerText = "100";
+    
+    // Adiciona o brilho especial se a ABT estiver cheia (conforme seu CSS anterior)
+    if(abtBar) abtBar.classList.add('abt-full');
+    updateHP();
+}, 100);
             
             // Botões Alinhados
             if(foot) {
@@ -1297,7 +1346,7 @@ window.takeDamage = function() {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                const k = typeof currentKey !== 'undefined' ? currentKey : 'determinacao';
+                const k = typeof currentKey !== 'undefined' ? currentKey : 'determinação';
                 document.getElementById('w-img-v39').src = e.target.result;
                 localStorage.setItem(`weapon_img_${k}`, e.target.result);
             };
@@ -1305,7 +1354,7 @@ window.takeDamage = function() {
         }
     };
     window.saveWeaponName = (name) => { 
-        const k = typeof currentKey !== 'undefined' ? currentKey : 'determinacao';
+        const k = typeof currentKey !== 'undefined' ? currentKey : 'determinação';
         localStorage.setItem(`weapon_name_${k}`, name); 
     };
 
@@ -1377,61 +1426,10 @@ setInterval(() => {
     }
 }, 500);
 
-window.takeDamage = function() {
-    const hpEl = document.getElementById('curr-hp');
-    if (!hpEl) return;
-
-    let hp = parseInt(hpEl.innerText);
-    hp = Math.max(0, hp - 5); // Tira 5 de vida
-    hpEl.innerText = hp;
-
-    if (window.updateHP) updateHP();
-    if (window.sfx) sfx(150, 'sawtooth', 0.1, 0.1);
-
-    if (hp <= 0) {
-        window.triggerGameOver();
-    }
-};
-
-window.triggerGameOver = function() {
-    const goScreen = document.getElementById('game-over-screen');
-    const finalOverlay = document.getElementById('final-overlay');
-    const anchor = document.getElementById('soul-anchor');
-
-    if (finalOverlay) finalOverlay.style.display = 'none';
-    if (goScreen) goScreen.style.display = 'flex';
-    
-    anchor.innerHTML = '<span id="dying-soul" style="color:#fff; font-size:4rem;">❤</span>';
-    
-    setTimeout(() => {
-        const soul = document.getElementById('dying-soul');
-        if (soul) soul.classList.add('soul-break');
-        if (window.sfx) sfx(80, 'square', 0.1, 0.2); 
-
-        setTimeout(() => {
-            if (soul) soul.style.display = 'none';
-            for(let i=0; i<12; i++) {
-                const p = document.createElement('div');
-                p.className = 'soul-shatter-piece';
-                p.innerText = '❤';
-                p.style.setProperty('--dx', (Math.random() - 0.5) * 600 + 'px');
-                p.style.setProperty('--dy', (Math.random() - 0.5) * 600 + 'px');
-                p.style.setProperty('--dr', (Math.random() * 720) + 'deg');
-                anchor.appendChild(p);
-            }
-            if (window.sfx) sfx(40, 'sawtooth', 0.8, 0.2);
-
-            setTimeout(() => {
-                document.getElementById('go-text').style.opacity = "1";
-                document.getElementById('retry-btn').style.opacity = "1";
-            }, 2000);
-        }, 1000);
-    }, 1500);
-};
 
     window.openM39 = () => {
         const m=document.getElementById('win-mag'), l=document.getElementById('mag-list-v39'); l.innerHTML="";
-        const k = typeof currentKey !== 'undefined' ? currentKey : 'determinacao';
+        const k = typeof currentKey !== 'undefined' ? currentKey : 'determinação';
         (ASSETS[k].m).forEach(s => { const d=document.createElement('div'); d.className='opt-v39'; d.innerHTML=`${s.n}<br><small style="color:#444">${s.c}TP - ${s.d}</small>`;
             d.onclick=()=>{ if(parseInt(document.getElementById('v-tp39').innerText)>=s.c){ window.adj39('tp',-s.c); window.closeM39(); if(window.sfx) sfx(1200,'sine',0.4,0.1); } else { if(window.sfx) sfx(100,'sawtooth',0.2,0.1); } }; l.appendChild(d); });
         m.style.display='block'; document.getElementById('mag-ov').style.display='block';
@@ -1449,5 +1447,99 @@ window.triggerGameOver = function() {
             }), 400); });
     }, 700); };
 })();
+
+// APAGUE as versões repetidas e COLE esta única no final do seu script:
+window.takeDamage = function() {
+    const hpEl = document.getElementById('curr-hp');
+    if (!hpEl) return;
+
+    let hp = parseInt(hpEl.innerText);
+    hp = Math.max(0, hp - 1); 
+    hpEl.innerText = hp;
+
+    // REMOVIDO: O filtro de inversão de cores e a classe .shake
+    if (window.updateHP) updateHP();
+    if (window.sfx) sfx(150, 'sawtooth', 0.1, 0.1);
+
+    if (hp <= 0) {
+        window.triggerGameOver();
+    } else {
+        // Salva o HP atual toda vez que levar dano
+        saveRPGState();
+    }
+};
+
+// Função para SALVAR tudo
+function saveRPGState() {
+    const state = {
+        hp: document.getElementById('curr-hp')?.innerText || "20",
+        lv: document.getElementById('sheet-lv')?.innerText || "1",
+        exp: document.getElementById('sheet-exp')?.innerText || "0",
+        tp: document.getElementById('v-tp39')?.innerText || "100",
+        abt: document.getElementById('v-abt39')?.innerText || "100"
+    };
+    localStorage.setItem(`rpg_save_v39_${currentKey}`, JSON.stringify(state));
+}
+
+// Modifique sua função adj39 para salvar ao mudar as barras
+const oldAdj = window.adj39;
+window.adj39 = (t, a) => {
+    oldAdj(t, a);
+    saveRPGState();
+};
+
+
+window.triggerGameOver = function() {
+    const goScreen = document.getElementById('game-over-screen');
+    const finalOverlay = document.getElementById('final-overlay');
+    const anchor = document.getElementById('soul-anchor');
+    const goText = document.getElementById('go-text');
+    const retryBtn = document.getElementById('retry-btn');
+
+    // 1. Limpa estados anteriores e exibe a tela
+    if (finalOverlay) finalOverlay.style.display = 'none';
+    goScreen.style.display = 'flex';
+    anchor.innerHTML = '<span id="dying-soul" style="color:#fff; font-size:4rem; display:block;">❤</span>';
+    
+    // 2. Som de impacto inicial
+    if (window.sfx) sfx(100, 'sawtooth', 0.5, 0.3);
+
+    // 3. Sequência de animação
+    setTimeout(() => {
+        const soul = document.getElementById('dying-soul');
+        if (soul) soul.classList.add('soul-break'); // Tremedeira antes de quebrar
+        if (window.sfx) sfx(80, 'square', 0.1, 0.2); 
+
+        setTimeout(() => {
+            if (soul) soul.style.display = 'none'; // Esconde a alma inteira
+            
+            // 4. Explosão de estilhaços
+            for(let i=0; i<12; i++) {
+                const p = document.createElement('div');
+                p.className = 'soul-shatter-piece';
+                p.innerText = '❤';
+                p.style.setProperty('--dx', (Math.random() - 0.5) * 600 + 'px');
+                p.style.setProperty('--dy', (Math.random() - 0.5) * 600 + 'px');
+                p.style.setProperty('--dr', (Math.random() * 720) + 'deg');
+                anchor.appendChild(p);
+            }
+            // Som de explosão corrigido
+            if (window.sfx) sfx(40, 'sawtooth', 0.8, 0.3);
+
+            // 5. Mostra o texto e o botão após a poeira baixar
+            setTimeout(() => {
+                if (goText) goText.style.opacity = "1";
+                if (retryBtn) {
+                    retryBtn.style.opacity = "1";
+                    retryBtn.style.pointerEvents = "auto";
+                }
+            }, 1500);
+        }, 1000);
+    }, 1500);
+};
+
+
+
+
 </script>
 
